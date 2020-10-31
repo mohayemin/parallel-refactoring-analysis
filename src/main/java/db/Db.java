@@ -6,7 +6,6 @@ import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
 
 import java.sql.SQLException;
-import java.util.Map;
 
 public class Db {
     private ConnectionSource connection;
