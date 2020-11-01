@@ -1,5 +1,6 @@
 package analyzer;
 
+import db.Db;
 import db.MergeCommit;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -15,23 +16,25 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MergeCommitAnalyzer {
+    private Db db;
     private Git git;
     private MergeCommit mergeCommit;
 
-    public MergeCommitAnalyzer(Git repository, MergeCommit mergeCommit) {
+    public MergeCommitAnalyzer(Db db, Git repository, MergeCommit mergeCommit) {
+        this.db = db;
         this.git = repository;
         this.mergeCommit = mergeCommit;
     }
 
     public void analyzeParallelRefactoring(Set<String> refactoringHashes) throws IOException, GitAPIException {
         var mergeRev = this.git.getRepository().parseCommit(ObjectId.fromString((mergeCommit.commitHash)));
-        var mergeParents = mergeRev.getParents();
-        var baseRev = findMergeBase(mergeParents[0], mergeParents[1]);
+        var mergeRevParents = mergeRev.getParents();
+        var baseRev = findMergeBase(mergeRevParents[0], mergeRevParents[1]);
 
         if (baseRev == null) return;
 
-        var firstAncestry = getRevList(baseRev, mergeParents[0]);
-        var secondAncestry = getRevList(baseRev, mergeParents[1]);
+        var firstAncestry = getRevList(baseRev, mergeRevParents[0]);
+        var secondAncestry = getRevList(baseRev, mergeRevParents[1]);
 
         firstAncestry.retainAll(refactoringHashes);
         secondAncestry.retainAll(refactoringHashes);

@@ -36,7 +36,7 @@ public class ProjectAnalyzer {
         System.out.println(refactoringHashes.size() + " refactoring commits");
 
         for (var mc : mergeCommits) {
-            var mergeAnalyzer = new MergeCommitAnalyzer(repository, mc);
+            var mergeAnalyzer = new MergeCommitAnalyzer(db, repository, mc);
             mergeAnalyzer.analyzeParallelRefactoring(refactoringHashes);
             db.mergeCommits.update(mc);
         }
