@@ -1,7 +1,6 @@
 import analyzer.ParallelRefactoringAnalyzer;
 import db.Db;
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.ObjectId;
 
 import java.io.IOException;
 import java.sql.SQLException;

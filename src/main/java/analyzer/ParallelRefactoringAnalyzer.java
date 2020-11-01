@@ -51,23 +51,5 @@ public class ParallelRefactoringAnalyzer {
         project.isParallelRefactoringAnalysisDone = true;
         db.projects.update(project);
     }
-
-    private RevCommit findMergeBase(ObjectId hash1, ObjectId hash2) throws IOException {
-        RevWalk walk = new RevWalk(repository.getRepository());
-        walk.setRevFilter(RevFilter.MERGE_BASE);
-        walk.markStart(walk.parseCommit(hash1));
-        walk.markStart(walk.parseCommit(hash2));
-        return walk.next();
-    }
-
-    private List<RevCommit> getMergeCommitHashes() throws GitAPIException {
-        var mergeCommits = repository.log().setRevFilter(RevFilter.ONLY_MERGES).call();
-        return StreamSupport.stream(mergeCommits.spliterator(), false).collect(Collectors.toList());
-    }
-
-    public List<ObjectId> getRevList(ObjectId from, ObjectId to) throws IOException, GitAPIException {
-        var commits = repository.log().addRange(from, to).call();
-        return StreamSupport.stream(commits.spliterator(), false).map(RevObject::getId).collect(Collectors.toList());
-    }
 }
 
