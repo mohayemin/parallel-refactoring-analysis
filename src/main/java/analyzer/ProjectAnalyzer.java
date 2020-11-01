@@ -10,12 +10,12 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.stream.Collectors;
 
-public class ParallelRefactoringAnalyzer {
+public class ProjectAnalyzer {
     private final Db db;
     private final Project project;
     private final Git repository;
 
-    public ParallelRefactoringAnalyzer(Db db, String analysisRepositoryRoot, Project project) throws IOException {
+    public ProjectAnalyzer(Db db, String analysisRepositoryRoot, Project project) throws IOException {
         this.db = db;
         this.project = project;
         this.repository = Git.open(new File(analysisRepositoryRoot + "/" + project.name));

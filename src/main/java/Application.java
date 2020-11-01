@@ -1,4 +1,4 @@
-import analyzer.ParallelRefactoringAnalyzer;
+import analyzer.ProjectAnalyzer;
 import db.Db;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
@@ -10,7 +10,7 @@ public class Application {
         Db db = new Db();
         var project = db.projects.queryForEq("name", "ninja").get(0);
 
-        var analyzer = new ParallelRefactoringAnalyzer(db, "/work/PhD/DS-CMPUT-605/Project/analysisRepositories", project);
+        var analyzer = new ProjectAnalyzer(db, "/work/PhD/DS-CMPUT-605/Project/analysisRepositories", project);
         analyzer.analyze();
     }
 }
