@@ -5,7 +5,7 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "refactoring_commit")
 public class RefactoringCommit {
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
     public int id;
 
     @DatabaseField(columnName = "commit_hash")
@@ -14,3 +14,4 @@ public class RefactoringCommit {
     @DatabaseField(columnName = "project_id")
     public int projectId;
 }
+

@@ -5,12 +5,14 @@ import com.j256.ormlite.table.DatabaseTable;
 
 @DatabaseTable(tableName = "project")
 public class Project {
-    @DatabaseField(id = true)
+    @DatabaseField(generatedId = true)
     public int id;
     @DatabaseField
     public String name;
     @DatabaseField
     public String url;
+    @DatabaseField(columnName = "is_parallel_refactoring_analysis_done")
+    public boolean isParallelRefactoringAnalysisDone;
 
     public Project(){
 

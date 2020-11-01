@@ -1,7 +1,6 @@
 package analyzer;
 
 import db.Db;
-import db.ParallelRefactoring;
 import db.Project;
 import org.eclipse.jgit.api.Git;
 
@@ -32,25 +31,25 @@ public class ParallelRefactoringAnalyzer {
 
     public void analyze() throws GitAPIException, IOException, SQLException {
         System.out.printf("analyzing %s, id %d\n", project.name, project.id);
-        var mergeCommitHashes = getMergeCommitHashes();
+
+        var mergeCommits = db.mergeCommits.queryForEq("project_id", project.id);
+
         var refactoringHashes = db.refactoringCommits.queryForEq("project_id", project.id)
                 .stream()
                 .map(rc -> rc.commitHash)
                 .collect(Collectors.toSet());
 
-        System.out.println(mergeCommitHashes.size() + " merge commits");
+        System.out.println(mergeCommits.size() + " merge commits");
         System.out.println(refactoringHashes.size() + " refactoring commits");
 
-        var count = 0;
-        for (var mc : mergeCommitHashes) {
-            var mergeAnalyzer = new MergeCommit(repository, mc);
-            if (mergeAnalyzer.isParallelRefactoringMerge(refactoringHashes)){
-                System.out.println(mc.getName());
-                count++;
-            }
+        for (var mc : mergeCommits) {
+            var mergeAnalyzer = new MergeCommitAnalyzer(repository, mc);
+            mergeAnalyzer.analyzeParallelRefactoring(refactoringHashes);
+            db.mergeCommits.update(mc);
         }
 
-        System.out.println(count);
+        project.isParallelRefactoringAnalysisDone = true;
+        db.projects.update(project);
     }
 
     private RevCommit findMergeBase(ObjectId hash1, ObjectId hash2) throws IOException {

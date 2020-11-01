@@ -1,10 +1,10 @@
 package analyzer;
 
+import db.MergeCommit;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevObject;
 import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.revwalk.filter.RevFilter;
 
@@ -14,33 +14,36 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
-public class MergeCommit {
+public class MergeCommitAnalyzer {
     private Git git;
-    private RevCommit mergeCommit;
+    private MergeCommit mergeCommit;
 
-    public MergeCommit(Git repository, RevCommit mergeCommit) {
+    public MergeCommitAnalyzer(Git repository, MergeCommit mergeCommit) {
         this.git = repository;
         this.mergeCommit = mergeCommit;
     }
 
-    public boolean isParallelRefactoringMerge(Set<String> refactoringHashes) throws IOException, GitAPIException {
-        var mergeParents = mergeCommit.getParents();
-        var commonAncestor = findMergeBase(mergeParents[0], mergeParents[1]);
+    public void analyzeParallelRefactoring(Set<String> refactoringHashes) throws IOException, GitAPIException {
+        var mergeRev = this.git.getRepository().parseCommit(ObjectId.fromString((mergeCommit.commitHash)));
+        var mergeParents = mergeRev.getParents();
+        var baseRev = findMergeBase(mergeParents[0], mergeParents[1]);
 
-        if (commonAncestor == null) return false;
+        if (baseRev == null) return;
 
-        var firstAncestry = getRevList(commonAncestor, mergeParents[0]);
-        var secondAncestry = getRevList(commonAncestor, mergeParents[1]);
+        var firstAncestry = getRevList(baseRev, mergeParents[0]);
+        var secondAncestry = getRevList(baseRev, mergeParents[1]);
 
         firstAncestry.retainAll(refactoringHashes);
         secondAncestry.retainAll(refactoringHashes);
 
-        return !firstAncestry.isEmpty() && !secondAncestry.isEmpty();
+        mergeCommit.baseCommitHash = baseRev.getName();
+        mergeCommit.branch1RefactoringCommitsCsv = String.join(",", firstAncestry);
+        mergeCommit.branch2RefactoringCommitsCsv = String.join(",", secondAncestry);
     }
 
     private List<String> getRevList(ObjectId from, ObjectId to) throws IOException, GitAPIException {
         var commits = git.log().addRange(from, to).call();
-        return StreamSupport.stream(commits.spliterator(), false).map(c->c.getId().getName()).collect(Collectors.toList());
+        return StreamSupport.stream(commits.spliterator(), false).map(c -> c.getId().getName()).collect(Collectors.toList());
     }
 
     private RevCommit findMergeBase(ObjectId hash1, ObjectId hash2) throws IOException {
