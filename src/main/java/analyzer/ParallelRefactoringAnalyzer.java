@@ -3,20 +3,12 @@ package analyzer;
 import db.Db;
 import db.Project;
 import org.eclipse.jgit.api.Git;
-
 import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.lib.ObjectId;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevObject;
-import org.eclipse.jgit.revwalk.RevWalk;
-import org.eclipse.jgit.revwalk.filter.RevFilter;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 public class ParallelRefactoringAnalyzer {
     private final Db db;
@@ -30,6 +22,7 @@ public class ParallelRefactoringAnalyzer {
     }
 
     public void analyze() throws GitAPIException, IOException, SQLException {
+        cleanup();
         System.out.printf("analyzing %s, id %d\n", project.name, project.id);
 
         var mergeCommits = db.mergeCommits.queryForEq("project_id", project.id);
@@ -50,6 +43,21 @@ public class ParallelRefactoringAnalyzer {
 
         project.isParallelRefactoringAnalysisDone = true;
         db.projects.update(project);
+    }
+
+    public void cleanup() throws SQLException {
+        project.isParallelRefactoringAnalysisDone = false;
+        db.projects.update(project);
+
+        var updateBuilder = db.mergeCommits.updateBuilder();
+        updateBuilder.where().eq("project_id", project.id);
+        updateBuilder
+                .updateColumnValue("base_commit_hash", null)
+                .updateColumnValue("branch1_refactoring_commits_csv", null)
+                .updateColumnValue("branch2_refactoring_commits_csv", null)
+        ;
+
+        db.mergeCommits.update(updateBuilder.prepare());
     }
 }
 
