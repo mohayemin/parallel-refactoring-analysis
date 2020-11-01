@@ -8,7 +8,7 @@ import java.sql.SQLException;
 public class Application {
     public static void main(String[] args) throws SQLException, IOException, GitAPIException {
         Db db = new Db();
-        var project = db.projects.queryForEq("name", "ninja").get(0);
+        var project = db.projects.queryForEq("name", "junit").get(0);
 
         var analyzer = new ProjectAnalyzer(db, "/work/PhD/DS-CMPUT-605/Project/analysisRepositories", project);
         analyzer.analyze();
