@@ -1,9 +1,6 @@
 package analyzer;
 
-import db.Db;
-import db.MergeCommit;
-import db.ParallelRefactoringOverlap;
-import db.RefactoringRegion;
+import db.*;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.lib.ObjectId;
@@ -15,22 +12,22 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 public class MergeCommitAnalyzer {
-    private final Db db;
+    private Db db;
     private final Git git;
+    private final ProjectData projectData;
     private final MergeCommit mergeCommit;
-    private final List<String> refactoringCommitHashes;
 
-    public MergeCommitAnalyzer(Db db, Git repository, MergeCommit mergeCommit, List<String> refactoringCommitHashes) {
+
+    public MergeCommitAnalyzer(Db db, Git git, ProjectData projectData, MergeCommit mergeCommit) {
         this.db = db;
-        this.git = repository;
+        this.git = git;
+        this.projectData = projectData;
         this.mergeCommit = mergeCommit;
-        this.refactoringCommitHashes = refactoringCommitHashes;
     }
 
     public void analyzeParallelRefactoring() throws IOException, GitAPIException, SQLException {
@@ -51,6 +48,8 @@ public class MergeCommitAnalyzer {
         if (!allOverlaps.isEmpty()) {
             db.parallelRefactoringOverlaps.create(allOverlaps);
         }
+
+        db.mergeCommits.update(mergeCommit);
     }
 
     public Collection<ParallelRefactoringOverlap> findOverlaps(Collection<RefactoringRegion> one, Collection<RefactoringRegion> two) {
@@ -65,21 +64,19 @@ public class MergeCommitAnalyzer {
         return overlaps;
     }
 
-    private Collection<RefactoringRegion> getRefactoringRegions(ObjectId from, ObjectId to) throws SQLException, IOException, GitAPIException {
+    private Collection<RefactoringRegion> getRefactoringRegions(ObjectId from, ObjectId to) throws IOException, GitAPIException {
         var hashes = getRefactoringRevList(from, to);
         if (hashes.isEmpty()){
             return new ArrayList<>();
         }
 
-        var qb = db.refactoringRegions.queryBuilder();
-        qb.where().in("commit_hash", hashes);
-        return db.refactoringRegions.query(qb.prepare());
+        return projectData.refactoringRegions.stream().filter(rr-> hashes.contains(rr.commitHash)).collect(Collectors.toList());
     }
 
     private Set<String> getRefactoringRevList(ObjectId from, ObjectId to) throws IOException, GitAPIException {
         var commits = git.log().addRange(from, to).call();
         var commitHashes = StreamSupport.stream(commits.spliterator(), false).map(c -> c.getId().getName()).collect(Collectors.toSet());
-        commitHashes.retainAll(refactoringCommitHashes);
+        commitHashes.retainAll(projectData.refactoringHashes);
         commitHashes.remove(from.name());
 
         return commitHashes;

@@ -4,8 +4,8 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
 import com.j256.ormlite.support.ConnectionSource;
-import org.eclipse.jgit.lib.ObjectId;
 
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class Db {
@@ -31,5 +31,9 @@ public class Db {
         var builder = dao.deleteBuilder();
         builder.where().eq(propertyName, propertyValue);
         builder.delete();
+    }
+
+    public void close() throws IOException {
+        connection.close();
     }
 }
