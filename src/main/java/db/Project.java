@@ -11,11 +11,20 @@ public class Project {
     public String name;
     @DatabaseField
     public String url;
+
+    @DatabaseField(columnName = "is_done")
+    public boolean isDone;
+
     @DatabaseField(columnName = "is_parallel_refactoring_analysis_done")
     public boolean isParallelRefactoringAnalysisDone;
 
-    public Project(){
+    public Project() {
 
+    }
+
+    @Override
+    public String toString() {
+        return name + "(" + id + ")";
     }
 }
 

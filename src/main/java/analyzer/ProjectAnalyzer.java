@@ -9,6 +9,8 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 import java.io.IOException;
 import java.sql.SQLException;
 
+import static utils.Logger.log;
+
 public class ProjectAnalyzer {
     private Db db;
     private final Git git;
@@ -22,17 +24,13 @@ public class ProjectAnalyzer {
 
     public void analyze() throws GitAPIException, IOException, SQLException {
         cleanup();
-        System.out.printf("analyzing %s, id %d\n", projectData.project.name, projectData.project.id);
-
-        System.out.println(projectData.mergeCommits.size() + " merge commits");
-        System.out.println(projectData.refactoringHashes.size() + " refactoring commits");
 
         var count = 0;
         for (var mc : projectData.mergeCommits) {
             var mergeAnalyzer = new MergeCommitAnalyzer(db, git, projectData, mc);
             mergeAnalyzer.analyzeParallelRefactoring();
             db.mergeCommits.update(mc);
-            System.out.println("commit " + ++count + " of " + projectData.mergeCommits.size() + ": " + mc.parallelRefactoringCount + " parallel refactorings");
+            log("merge " + ++count + " of " + projectData.mergeCommits.size() + ": " + mc.parallelRefactoringCount + " parallel refactorings");
         }
 
         projectData.project.isParallelRefactoringAnalysisDone = true;

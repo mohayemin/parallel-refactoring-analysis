@@ -20,13 +20,23 @@ public class ProjectData {
         this.refactoringHashes = refactoringHashes;
     }
 
-    public static ProjectData load(Db db, String projectName) throws SQLException {
-        var project = db.projects.queryForEq("name", projectName).get(0);
+    public static ProjectData load(Db db, Project project) throws SQLException {
         var mergeCommits = db.mergeCommits.queryForEq("project_id", project.id);
         var refactoringHashes = db.refactoringCommits.queryForEq("project_id", project.id)
                 .stream().map(c -> c.commitHash).collect(Collectors.toList());
         var refactoringRegions = db.refactoringRegions.queryForEq("project_id", project.id);
 
         return new ProjectData(project, mergeCommits, refactoringRegions, refactoringHashes);
+    }
+
+    public String summary() {
+        return String.format("%s(%d), %d merges, %d refactorings, %d refactoring regions, %d merges with parallel refactoring",
+                project.name,
+                project.id,
+                mergeCommits.size(),
+                refactoringHashes.size(),
+                refactoringRegions.size(),
+                mergeCommits.stream().filter(mc->mc.parallelRefactoringCount > 0).count()
+        );
     }
 }
