@@ -10,16 +10,6 @@
 );
 
 alter table merge_commit
-    drop constraint fk_merge_commit_project;
-
-alter table merge_commit
-    DROP index fk_merge_commit_project_idx;
-
-alter table merge_commit
-    DROP constraint commit_hash_UNIQUE;
-
-
-alter table merge_commit
     drop column has_parallel_refactoring,
     drop column branch1_has_refactoring,
     drop column branch2_has_refactoring,
