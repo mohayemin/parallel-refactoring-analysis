@@ -1,6 +1,6 @@
 ﻿drop view if exists merge_commit__project;
 create view merge_commit__project as
-    select mc.*, p.name from
+    select mc.*, p.name as project_name from
         merge_commit mc left join project p
             on mc.project_id = p.id
     where p.is_parallel_refactoring_analysis_done = true and p.is_done = true;

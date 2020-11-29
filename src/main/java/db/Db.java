@@ -1,5 +1,6 @@
 package db;
 
+import analyzer.DatabaseOptions;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -16,9 +17,10 @@ public class Db {
     public final Dao<RefactoringRegion, Integer> refactoringRegions;
     public final Dao<ParallelRefactoringOverlap, Integer> parallelRefactoringOverlaps;
 
-    public Db() throws SQLException {
-        connection =
-                new JdbcConnectionSource("jdbc:mysql://localhost:3306/parallel_refactoring_analysis", "root", "admin");
+    public Db(DatabaseOptions options) throws SQLException {
+        connection = new JdbcConnectionSource("jdbc:mysql://" + options.serverUrl + "/" + options.databaseName,
+                options.username,
+                options.password);
         projects = DaoManager.createDao(connection, Project.class);
         refactoringCommits = DaoManager.createDao(connection, RefactoringCommit.class);
         mergeCommits = DaoManager.createDao(connection, MergeCommit.class);

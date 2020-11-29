@@ -21,8 +21,8 @@ public class RefactoringRegion {
     @DatabaseField(columnName = "start_line")
     public int startLine;
 
-    @DatabaseField(columnName = "refactoring_commit_id")
-    public int refactoringCommitId;
+    @DatabaseField(columnName = "refactoring_id")
+    public int refactoringId;
 
     @DatabaseField
     public int length;
