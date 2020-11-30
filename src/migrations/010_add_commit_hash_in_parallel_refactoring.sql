@@ -39,7 +39,7 @@ select project_id,
        refactoring1_type,
        refactoring2_type
 from parallel_refactoring_overlap__refactoring__merge_commit
-group by refactoring_pair
+group by refactoring1_id, refactoring2_id
 ;
 
 insert into _migrations (script_file) value ('010_add_commit_hash_in_parallel_refactoring.sql');
