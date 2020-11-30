@@ -17,6 +17,7 @@ create view parallel_refactoring_overlap__refactoring as
     from parallel_refactoring_overlap pro
              left join refactoring r1 on pro.refactoring1_id = r1.id
              left join refactoring r2 on pro.refactoring2_id = r2.id
+                                             and r1.id != r2.id
 ;
 
 insert into _migrations (script_file) value ('006_add_view_joining_overlapping__refactoring__merge.sql');
