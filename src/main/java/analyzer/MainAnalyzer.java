@@ -28,14 +28,14 @@ public class MainAnalyzer {
 
         var query = db.projects.queryBuilder().where();
         query.eq("is_done", true);
-        if(options.projectIds != null)
+        if(options.projectIds != null && options.projectIds.length > 0)
             query.and().in("id", Arrays.asList(options.projectIds));
         if(options.skipProcessedProjects)
             query.and().eq("is_parallel_refactoring_analysis_done", false);
 
         for (Project project : db.projects.query(query.prepare())) {
             try {
-                analyzeProject(project);
+                new ProjectAnalyzer(project, options).analyze();
             } catch (Exception e) {
                 e.printStackTrace();
                 log("Failed to analyze project " + project.name + ". Skipping");
@@ -43,51 +43,5 @@ public class MainAnalyzer {
         }
 
         db.close();
-    }
-
-    private void analyzeProject(Project project) throws SQLException, IOException, GitAPIException {
-        log("======================================");
-        log("======================================");
-        log("======================================");
-        logWithTime("Start analyzing %s\n", project);
-
-        var gitDirectory = new File(options.analysisRepositoryRoot + "/" + project.name);
-        if (!gitDirectory.exists()) {
-            log("Local repository unavailable at ." + gitDirectory.getAbsolutePath());
-            if(options.skipLocallyUnavailableProjects){
-                log("Skipping");
-                return;
-            } else {
-                cloneProject(project, gitDirectory);
-            }
-        }
-        var git = Git.open(gitDirectory);
-
-        var startTime = System.currentTimeMillis();
-        Db db = new Db(options.dbOptions);
-        var projectData = ProjectData.load(db, project);
-
-        log(projectData.mergeCommits.size() + " merge commits");
-        log(projectData.refactoringHashes.size() + " refactoring commits");
-
-        var analyzer = new ProjectAnalyzer(db, git, projectData);
-        analyzer.analyze();
-
-        db.close();
-        git.gc();
-        System.gc();
-
-        var endTime = System.currentTimeMillis();
-        logWithTime(projectData.summary() + ", done in " + (endTime - startTime) / 1000.0 + " seconds");
-    }
-
-    private void cloneProject(Project project, File gitDirectory) throws GitAPIException {
-        log("Cloning from %s\n", project.url);
-        Git.cloneRepository()
-                .setProgressMonitor(new TextProgressMonitor(new PrintWriter(System.out)))
-                .setURI(project.url)
-                .setDirectory(gitDirectory)
-                .call();
-        logWithTime("Done cloning\n");
     }
 }

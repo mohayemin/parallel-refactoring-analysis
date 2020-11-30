@@ -56,6 +56,15 @@ public class MergeCommitAnalyzer {
         ArrayList<ParallelRefactoringOverlap> overlaps = new ArrayList<>();
         for (var unitOne : one) {
             for (var unitTwo : two) {
+                if (unitOne.commitHash.equals(unitTwo.commitHash)) {
+                    /*
+                    * TODO: sometimes, same unit comes from both branches
+                    *  This should not happen and needs to be fixed
+                    *  For now, just skipping such pair should work
+                    * */
+                    continue;
+                }
+
                 if (unitOne.overlaps(unitTwo))
                     overlaps.add(new ParallelRefactoringOverlap(unitOne, unitTwo, mergeCommit.commitHash));
             }
@@ -66,11 +75,11 @@ public class MergeCommitAnalyzer {
 
     private Collection<RefactoringRegion> getRefactoringRegions(ObjectId from, ObjectId to) throws IOException, GitAPIException {
         var hashes = getRefactoringRevList(from, to);
-        if (hashes.isEmpty()){
+        if (hashes.isEmpty()) {
             return new ArrayList<>();
         }
 
-        return projectData.refactoringRegions.stream().filter(rr-> hashes.contains(rr.commitHash)).collect(Collectors.toList());
+        return projectData.refactoringRegions.stream().filter(rr -> hashes.contains(rr.commitHash)).collect(Collectors.toList());
     }
 
     private Set<String> getRefactoringRevList(ObjectId from, ObjectId to) throws IOException, GitAPIException {

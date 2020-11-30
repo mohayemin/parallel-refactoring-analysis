@@ -6,5 +6,6 @@ from refactoring_pair pair
          left join parallel_refactoring pr
                    on pair.name = pr.refactoring_pair
 group by pair.name
-order by total_count desc ;
+order by total_count desc
+;
 
