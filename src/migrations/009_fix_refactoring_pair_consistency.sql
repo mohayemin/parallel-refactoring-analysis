@@ -25,7 +25,7 @@ select
     merge_commit_hash,
     is_merge_conflicting
 from parallel_refactoring_overlap__refactoring__merge_commit
-group by refactoring1_id, refactoring2_id
+group by refactoring_pair
 ;
 
 drop view if exists parallel_refactoring_overlap__refactoring;
