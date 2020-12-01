@@ -12,11 +12,14 @@ There is a script to drop constraints
 set @project_count := 500;
 
 delete from project where id > @project_count;
-delete from conflicting_java_file where project_id > @project_count;
-delete from conflicting_region where project_id > @project_count;
-delete from conflicting_region_history where project_id > @project_count;
-delete from merge_commit where project_id > @project_count;
-delete from refactoring where project_id > @project_count;
-delete from refactoring_commit where project_id > @project_count;
-delete from refactoring_region where project_id > @project_count;
+-- The following projects are no longer accessible at the given URL
+delete from project where id in (61,127,166,205,360,438);
 
+
+delete from conflicting_java_file where project_id not in (select id from project);
+delete from conflicting_region where project_id not in (select id from project);
+delete from conflicting_region_history where project_id not in (select id from project);
+delete from merge_commit where project_id not in (select id from project);
+delete from refactoring where project_id not in (select id from project);
+delete from refactoring_commit where project_id not in (select id from project);
+delete from refactoring_region where project_id not in (select id from project);

@@ -10,6 +10,12 @@ import static utils.Logger.logWithTime;
 
 public class Application {
     static Integer[] projectIds = {
+            61,
+            127,
+            166,
+            205,
+            360,
+            438
     };
 
     public static void main(String[] args) throws SQLException, IOException {
