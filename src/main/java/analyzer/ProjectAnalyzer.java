@@ -1,5 +1,6 @@
 package analyzer;
 
+import analyzer.reafactoring.RefactoringFactory;
 import db.Db;
 import db.ParallelRefactoringOverlap;
 import db.Project;
@@ -73,7 +74,7 @@ public class ProjectAnalyzer {
     }
 
     private void analyzeMerge(db.MergeCommit mc, Git git, ProjectData projectData) throws IOException, GitAPIException, SQLException {
-        var mergeAnalyzer = new MergeCommitAnalyzer(db, git, projectData, mc);
+        var mergeAnalyzer = new MergeCommitAnalyzer(db, git, projectData, mc, new RefactoringFactory());
         try {
             mergeAnalyzer.analyzeParallelRefactoring();
         } catch (MissingObjectException e) {

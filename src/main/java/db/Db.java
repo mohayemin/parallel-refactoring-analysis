@@ -16,6 +16,7 @@ public class Db {
     public final Dao<MergeCommit, Integer> mergeCommits;
     public final Dao<RefactoringRegion, Integer> refactoringRegions;
     public final Dao<ParallelRefactoringOverlap, Integer> parallelRefactoringOverlaps;
+    public final Dao<RefactoringDbItem, Integer> refactorings;
 
     public Db(DatabaseOptions options) throws SQLException {
         connection = new JdbcConnectionSource("jdbc:mysql://" + options.serverUrl + "/" + options.databaseName,
@@ -26,6 +27,7 @@ public class Db {
         mergeCommits = DaoManager.createDao(connection, MergeCommit.class);
         refactoringRegions = DaoManager.createDao(connection, RefactoringRegion.class);
         parallelRefactoringOverlaps = DaoManager.createDao(connection, ParallelRefactoringOverlap.class);
+        refactorings = DaoManager.createDao(connection, RefactoringDbItem.class);
     }
 
     public <T> void deleteByValue(Class<T> daoType, String propertyName, Object propertyValue) throws SQLException {
