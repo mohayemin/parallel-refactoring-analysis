@@ -2,7 +2,7 @@ package analyzer;
 
 import analyzer.reafactoring.RefactoringFactory;
 import db.Db;
-import db.ParallelRefactoringOverlap;
+import db.ParallelRefactoring;
 import db.Project;
 import db.ProjectData;
 import org.eclipse.jgit.api.Git;
@@ -38,7 +38,7 @@ public class ProjectAnalyzer {
         var gitDirectory = new File(options.analysisRepositoryRoot + "/" + project.name);
         if (!gitDirectory.exists()) {
             log("Local repository unavailable at ." + gitDirectory.getAbsolutePath());
-            if(options.skipLocallyUnavailableProjects){
+            if (options.skipLocallyUnavailableProjects) {
                 log("Skipping");
                 return;
             } else {
@@ -57,13 +57,11 @@ public class ProjectAnalyzer {
 
         var count = 0;
         for (var mc : projectData.mergeCommits) {
-            analyzeMerge(mc, git, projectData);
-            log("merge " + ++count + " of " + projectData.mergeCommits.size() + ": " + mc.parallelRefactoringCount + " parallel refactorings");
+            analyzeMerge(mc, git, projectData, ++count);
         }
 
         projectData.project.isParallelRefactoringAnalysisDone = true;
         db.projects.update(projectData.project);
-
 
         db.close();
         git.gc();
@@ -73,10 +71,11 @@ public class ProjectAnalyzer {
         logWithTime(projectData.summary() + ", done in " + (endTime - startTime) / 1000.0 + " seconds");
     }
 
-    private void analyzeMerge(db.MergeCommit mc, Git git, ProjectData projectData) throws IOException, GitAPIException, SQLException {
+    private void analyzeMerge(db.MergeCommit mc, Git git, ProjectData projectData, int count) throws IOException, GitAPIException, SQLException {
         var mergeAnalyzer = new MergeCommitAnalyzer(db, git, projectData, mc, new RefactoringFactory());
         try {
             mergeAnalyzer.analyzeParallelRefactoring();
+            log("merge " + count + " of " + projectData.mergeCommits.size() + ": " + mc.parallelRefactoringCount + " parallel refactorings");
         } catch (MissingObjectException e) {
             log("skipping unknown commit " + mc.commitHash);
         }
@@ -88,7 +87,7 @@ public class ProjectAnalyzer {
         project.isParallelRefactoringAnalysisDone = false;
         db.projects.update(projectData.project);
 
-        db.deleteByValue(ParallelRefactoringOverlap.class, "project_id", projectData.project.id);
+        db.deleteByValue(ParallelRefactoring.class, "project_id", projectData.project.id);
 
         var updateBuilder = db.mergeCommits.updateBuilder();
         updateBuilder.where().eq("project_id", projectData.project.id);

@@ -3,6 +3,7 @@ package analyzer.reafactoring;
 import db.RefactoringDbItem;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 // Move Attribute	protected modelManager : StructureModelManager
@@ -20,8 +21,7 @@ public class MoveAttributeRefactoring implements Refactoring {
         var parts = dbItem.refactoringDetail.replace('\t', ' ').split(" ");
         var attributeName = parts[3];
         var fromClass = parts[8];
-        var toClass = parts[11];
-        return Arrays.asList(fromClass + "." + attributeName, toClass + "." + attributeName);
+        return Collections.singletonList(fromClass + "." + attributeName);
     }
 
     @Override

@@ -15,7 +15,7 @@ public class RefactoringDbItem {
     public String refactoringDetail;
 
     @DatabaseField(columnName = "refactoring_commit_id")
-    public String refactoringCommitId;
+    public int refactoringCommitId;
 
     @DatabaseField(columnName = "commit_hash")
     public String commitHash;

@@ -27,7 +27,6 @@ public class MergeCommitAnalyzer {
     private final MergeCommit mergeCommit;
     private final RefactoringFactory refactoringFactory;
 
-
     public MergeCommitAnalyzer(
             Db db, Git git,
             ProjectData projectData,
@@ -41,7 +40,7 @@ public class MergeCommitAnalyzer {
         this.refactoringFactory = refactoringFactory;
     }
 
-    public void analyzeParallelRefactoring() throws IOException, GitAPIException {
+    public void analyzeParallelRefactoring() throws IOException, GitAPIException, SQLException {
 
         var mergeRev = this.git.getRepository().parseCommit(ObjectId.fromString((mergeCommit.commitHash)));
         var mergeRevParents = new Pair<>(mergeRev.getParents());
@@ -49,27 +48,25 @@ public class MergeCommitAnalyzer {
 
         if (baseRev == null) return;
 
-        var firstRegions = getRefactorings(baseRev, mergeRevParents.first);
-        var secondRegions = getRefactorings(baseRev, mergeRevParents.second);
+        var firstRefactorings = getRefactorings(baseRev, mergeRevParents.first);
+        var secondRefactorings = getRefactorings(baseRev, mergeRevParents.second);
 
-        var allOverlaps = findParallelRefactorings(firstRegions, secondRegions);
+        var allOverlaps = findParallelRefactorings(firstRefactorings, secondRefactorings);
 
 
         mergeCommit.baseCommitHash = baseRev.getName();
         mergeCommit.parallelRefactoringCount = allOverlaps.size();
 
-        System.out.println(allOverlaps.size() + " Pairs");
-/*
         if (!allOverlaps.isEmpty()) {
-            db.parallelRefactoringOverlaps.create(allOverlaps);
+            db.parallelRefactorings.create(allOverlaps);
         }
 
-        db.mergeCommits.update(mergeCommit);*/
+        db.mergeCommits.update(mergeCommit);
     }
 
-    public Collection<Pair<Refactoring>> findParallelRefactorings(Collection<Refactoring> firstBranchRefactorings,
-                                                                        Collection<Refactoring> secondBranchRefactorings) {
-        ArrayList<Pair<Refactoring>> overlaps = new ArrayList<>();
+    public Collection<ParallelRefactoring> findParallelRefactorings(Collection<Refactoring> firstBranchRefactorings,
+                                                                    Collection<Refactoring> secondBranchRefactorings) {
+        ArrayList<ParallelRefactoring> overlaps = new ArrayList<>();
         for (var refactoringOne : firstBranchRefactorings) {
             for (var refactoringTwo : secondBranchRefactorings) {
                 if (refactoringOne.dbItem().commitHash.equals(refactoringTwo.dbItem().commitHash)) {
@@ -82,7 +79,7 @@ public class MergeCommitAnalyzer {
                 }
 
                 if (refactoringOne.overlaps(refactoringTwo))
-                    overlaps.add(new Pair<>(refactoringOne, refactoringTwo));
+                    overlaps.add(new ParallelRefactoring(refactoringOne.dbItem(), refactoringTwo.dbItem(), mergeCommit));
             }
         }
 
@@ -119,6 +116,9 @@ public class MergeCommitAnalyzer {
         walk.markStart(children.first);
         walk.markStart(children.second);
         var base = walk.next();
+        if (base == null)
+            return null;
+
         if (base.getName().equals(children.first.getName()) || base.getName().equals(children.second.getName()))
             return null;
 

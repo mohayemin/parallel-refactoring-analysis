@@ -19,4 +19,7 @@ public class MergeCommit {
 
     @DatabaseField(columnName = "parallel_refactoring_count")
     public int parallelRefactoringCount;
+
+    @DatabaseField(columnName = "is_conflicting")
+    public boolean isConflicting;
 }

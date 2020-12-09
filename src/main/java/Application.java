@@ -10,12 +10,7 @@ import static utils.Logger.logWithTime;
 
 public class Application {
     static Integer[] projectIds = {
-            61,
-            127,
-            166,
-            205,
-            360,
-            438
+            45
     };
 
     public static void main(String[] args) throws SQLException, IOException {
@@ -26,7 +21,7 @@ public class Application {
         log("----------------------------");
 
         //projectIds = null;
-        var dbOptions = new DatabaseOptions("localhost:3306", "refactoring_analysis_full", "root", "admin");
+        var dbOptions = new DatabaseOptions("localhost:3306", "parallel_refactoring_analysis", "root", "admin");
         new MainAnalyzer(new AnalysisOptions(false,
                 false,
                 "D:\\PhD\\DS-CMPUT-605\\Project\\analysisRepositories",

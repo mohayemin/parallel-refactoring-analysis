@@ -16,7 +16,7 @@ import java.sql.SQLException;
 public class MergeCommitAnalyzerSampleRun {
     @Test
     public void run() throws SQLException, IOException, GitAPIException {
-        var db = new Db(new DatabaseOptions("localhost:3306", "refactoring_analysis_full", "root", "admin"));
+        var db = new Db(new DatabaseOptions("localhost:3306", "parallel_refactoring_analysis", "root", "admin"));
         var pd = ProjectData.load(db, 45);
         var git = Git.open(new File("D:\\PhD\\DS-CMPUT-605\\Project\\analysisRepositories\\" + pd.project.name));
 

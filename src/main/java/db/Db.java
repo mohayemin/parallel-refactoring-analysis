@@ -14,8 +14,7 @@ public class Db {
     public final Dao<Project, Integer> projects;
     public final Dao<RefactoringCommit, Integer> refactoringCommits;
     public final Dao<MergeCommit, Integer> mergeCommits;
-    public final Dao<RefactoringRegion, Integer> refactoringRegions;
-    public final Dao<ParallelRefactoringOverlap, Integer> parallelRefactoringOverlaps;
+    public final Dao<ParallelRefactoring, Integer> parallelRefactorings;
     public final Dao<RefactoringDbItem, Integer> refactorings;
 
     public Db(DatabaseOptions options) throws SQLException {
@@ -25,8 +24,7 @@ public class Db {
         projects = DaoManager.createDao(connection, Project.class);
         refactoringCommits = DaoManager.createDao(connection, RefactoringCommit.class);
         mergeCommits = DaoManager.createDao(connection, MergeCommit.class);
-        refactoringRegions = DaoManager.createDao(connection, RefactoringRegion.class);
-        parallelRefactoringOverlaps = DaoManager.createDao(connection, ParallelRefactoringOverlap.class);
+        parallelRefactorings = DaoManager.createDao(connection, ParallelRefactoring.class);
         refactorings = DaoManager.createDao(connection, RefactoringDbItem.class);
     }
 
