@@ -26,3 +26,5 @@ delete from merge_commit where project_id not in (select id from project);
 delete from refactoring where project_id not in (select id from project);
 delete from refactoring_commit where project_id not in (select id from project);
 delete from refactoring_region where project_id not in (select id from project);
+
+delete from refactoring where refactoring_type in ('Parameterize Variable', 'Move Source Folder');
