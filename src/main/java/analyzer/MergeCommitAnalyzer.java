@@ -47,14 +47,12 @@ public class MergeCommitAnalyzer {
         var baseRev = findMergeBase(mergeRevParents);
 
         if (baseRev == null) return;
+        mergeCommit.baseCommitHash = baseRev.getName();
 
         var firstRefactorings = getRefactorings(baseRev, mergeRevParents.first);
         var secondRefactorings = getRefactorings(baseRev, mergeRevParents.second);
 
         var allOverlaps = findParallelRefactorings(firstRefactorings, secondRefactorings);
-
-
-        mergeCommit.baseCommitHash = baseRev.getName();
         mergeCommit.parallelRefactoringCount = allOverlaps.size();
 
         if (!allOverlaps.isEmpty()) {
@@ -69,15 +67,6 @@ public class MergeCommitAnalyzer {
         ArrayList<ParallelRefactoring> overlaps = new ArrayList<>();
         for (var refactoringOne : firstBranchRefactorings) {
             for (var refactoringTwo : secondBranchRefactorings) {
-                if (refactoringOne.dbItem.commitHash.equals(refactoringTwo.dbItem.commitHash)) {
-                    /*
-                     * TODO: sometimes, same unit comes from both branches
-                     *  This should not happen and needs to be fixed
-                     *  For now, just skipping such pair should work
-                     * */
-                    continue;
-                }
-
                 if (refactoringOne.overlaps(refactoringTwo))
                     overlaps.add(new ParallelRefactoring(refactoringOne.dbItem, refactoringTwo.dbItem, mergeCommit));
             }
@@ -103,7 +92,10 @@ public class MergeCommitAnalyzer {
 
     private Set<String> getRefactoringCommitHashes(ObjectId from, ObjectId to) throws IOException, GitAPIException {
         var commits = git.log().addRange(from, to).call();
-        var commitHashes = StreamSupport.stream(commits.spliterator(), false).map(c -> c.getId().getName()).collect(Collectors.toSet());
+        var commitHashes = StreamSupport.stream(commits.spliterator(), false)
+                .filter(c->c.getParentCount() == 1) // keep non-merge commits only
+                .map(c -> c.getId().getName())
+                .collect(Collectors.toSet());
         commitHashes.retainAll(projectData.refactoringHashes);
         commitHashes.remove(from.name());
 
