@@ -10,7 +10,7 @@ public class RenameParameterRefactoring extends Refactoring {
     public String affectedElement() {
         var detail = dbItem.refactoringDetail;
         var cls = substring(detail, "in class ");
-        var method = substring(detail, "in method ", ") :") + ")";
+        var method = substring(detail, "in method ", ") ") + ")";
         method = substring(method, " ");
         return cls + "." + method;
     }
