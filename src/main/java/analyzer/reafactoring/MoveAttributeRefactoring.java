@@ -2,18 +2,15 @@ package analyzer.reafactoring;
 
 import db.RefactoringDbItem;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 // Move Attribute	protected modelManager : StructureModelManager
 // from class melnorme.lang.ide.ui.editor.structure.LangOutlineInformationControl
 //   to class melnorme.lang.ide.ui.editor.structure.GetUpdatedStructureUIOperation
-public class MoveAttributeRefactoring implements Refactoring {
-    private final RefactoringDbItem dbItem;
-
+public class MoveAttributeRefactoring extends Refactoring {
     public MoveAttributeRefactoring(RefactoringDbItem dbItem) {
-        this.dbItem = dbItem;
+        super(dbItem);
     }
 
     @Override
@@ -22,11 +19,6 @@ public class MoveAttributeRefactoring implements Refactoring {
         var attributeName = parts[3];
         var fromClass = parts[8];
         return Collections.singletonList(fromClass + "." + attributeName);
-    }
-
-    @Override
-    public RefactoringDbItem dbItem() {
-        return dbItem;
     }
 }
 

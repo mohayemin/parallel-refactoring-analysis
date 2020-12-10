@@ -69,7 +69,7 @@ public class MergeCommitAnalyzer {
         ArrayList<ParallelRefactoring> overlaps = new ArrayList<>();
         for (var refactoringOne : firstBranchRefactorings) {
             for (var refactoringTwo : secondBranchRefactorings) {
-                if (refactoringOne.dbItem().commitHash.equals(refactoringTwo.dbItem().commitHash)) {
+                if (refactoringOne.dbItem.commitHash.equals(refactoringTwo.dbItem.commitHash)) {
                     /*
                      * TODO: sometimes, same unit comes from both branches
                      *  This should not happen and needs to be fixed
@@ -79,7 +79,7 @@ public class MergeCommitAnalyzer {
                 }
 
                 if (refactoringOne.overlaps(refactoringTwo))
-                    overlaps.add(new ParallelRefactoring(refactoringOne.dbItem(), refactoringTwo.dbItem(), mergeCommit));
+                    overlaps.add(new ParallelRefactoring(refactoringOne.dbItem, refactoringTwo.dbItem, mergeCommit));
             }
         }
 

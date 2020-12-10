@@ -4,17 +4,22 @@ import db.RefactoringDbItem;
 
 import java.util.List;
 
-public interface Refactoring {
-    List<String> affectedElements();
-    RefactoringDbItem dbItem();
+public abstract class Refactoring {
+    public final RefactoringDbItem dbItem;
 
-    default boolean overlaps(Refactoring other) {
+    abstract List<String> affectedElements();
+
+    protected Refactoring(RefactoringDbItem dbItem) {
+        this.dbItem = dbItem;
+    }
+
+    public boolean overlaps(Refactoring other) {
         var myAffected = affectedElements();
         var otherAffected = other.affectedElements();
 
         for (var mf : myAffected)
-            for (var of: otherAffected)
-                if(mf.equals(of))
+            for (var of : otherAffected)
+                if (mf.equals(of))
                     return true;
 
         return false;

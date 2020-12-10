@@ -35,11 +35,13 @@ public class ProjectData {
     }
 
     public String summary() {
-        return String.format("%s(%d), %d merges, %d refactorings, %d merges with parallel refactoring",
+        var totalParallelRefactorings = mergeCommits.stream().mapToInt(mc->mc.parallelRefactoringCount).sum();
+        return String.format("%s(%d), %d merges, %d refactorings, %d parallel refactorings in %d merges",
                 project.name,
                 project.id,
                 mergeCommits.size(),
                 refactoringHashes.size(),
+                totalParallelRefactorings,
                 mergeCommits.stream().filter(mc -> mc.parallelRefactoringCount > 0).count()
         );
     }
