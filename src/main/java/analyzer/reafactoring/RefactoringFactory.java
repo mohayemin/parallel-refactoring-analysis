@@ -7,6 +7,7 @@ public class RefactoringFactory {
         return switch (dbItem.refactoringType) {
             case "Move Class" -> new MoveClassRefactoring(dbItem);
             case "Rename Method" -> new RenameMethodRefactoring(dbItem);
+            case "Rename Variable" -> new RenameVariableRefactoring(dbItem);
             case "Rename Parameter" -> new RenameParameterRefactoring(dbItem);
             case "Move Attribute" -> new MoveAttributeRefactoring(dbItem);
             default -> null;
