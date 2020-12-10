@@ -21,6 +21,7 @@ public class RefactoringFactory {
             case "Push Down Method" -> new PushDownMethodRefactoring(dbItem);
             case "Inline Method" -> new InlineMethodRefactoring(dbItem);
             case "Push Down Attribute" -> new PushDownAttributeRefactoring(dbItem);
+            case "Extract Superclass" -> new ExtractSuperclassRefactoring(dbItem);
             default -> null;
         };
     }
