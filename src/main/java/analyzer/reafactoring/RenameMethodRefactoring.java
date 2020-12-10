@@ -8,12 +8,13 @@ public class RenameMethodRefactoring extends Refactoring {
         super(dbItem);
     }
 
+    // Rename Method	public delete(accountSid String, sid String) : AddressDeleter renamed to public deleter(accountSid String, sid String) : AddressDeleter in class com.twilio.rest.api.v2010.account.Address----com.twilio.rest.api.v2010.account.Address.delete(accountSid String, sid String)
     @Override
     public String affectedElement() {
         var detail = dbItem.refactoringDetail;
-        var cls = detail.substring(detail.indexOf("in class ") + "in class ".length());
-        var method = detail.substring(detail.indexOf('\t') + 1);
-        method = method.substring(method.indexOf(' ') + 1, method.indexOf(" :"));
+        var cls = substring(detail, "in class ");
+        var method = substring(detail, "\t");
+        method = substring(method, " ", ")") + ")";
         return cls + "." + method;
     }
 }
