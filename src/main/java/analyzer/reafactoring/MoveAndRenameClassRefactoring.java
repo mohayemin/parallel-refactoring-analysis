@@ -9,7 +9,7 @@ public class MoveAndRenameClassRefactoring extends Refactoring {
 
     // Move And Rename Class	jackpal.androidterm.util.AndroidCompat.AndroidCharacterComp moved and renamed to jackpal.androidterm.compat.AndroidCharacterCompat----jackpal.androidterm.util.AndroidCompat.AndroidCharacterComp
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         return substring(dbItem.refactoringDetail, "\t", " moved and renamed to ");
     }
 }

@@ -9,7 +9,7 @@ public class RenameVariableRefactoring extends Refactoring{
 
     // Rename Variable\targs : ArrayList<String> to argList : ArrayList<String> in method private createSubprocess(processId int[]) : void in class jackpal.androidterm.session.TermSession----jackpal.androidterm.session.TermSession.createSubprocess(processId int[]).args
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
         var cls = substring(detail, "in class ");
         var method = substring(detail, "in method ", ") ") + ")";

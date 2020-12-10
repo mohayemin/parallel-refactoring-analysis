@@ -2,10 +2,24 @@ package analyzer.reafactoring;
 
 import db.RefactoringDbItem;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public abstract class Refactoring {
     public final RefactoringDbItem dbItem;
 
-    public abstract String affectedElement();
+    protected abstract String affectedElementRaw();
+
+    public List<String> allAffectedElements() {
+        var raw = affectedElementRaw();
+
+        if (raw.startsWith("[")) {
+            return Arrays.asList(raw.substring(1, raw.length() - 1).split(", "));
+        } else {
+            return Collections.singletonList(raw);
+        }
+    }
 
     protected Refactoring(RefactoringDbItem dbItem) {
         this.dbItem = dbItem;
@@ -14,7 +28,13 @@ public abstract class Refactoring {
     public boolean overlaps(Refactoring other) {
         if(isSameOrRebase(other))
             return false;
-        return affectedElement().equals(other.affectedElement());
+
+        for (var my : allAffectedElements())
+            for (var others: other.allAffectedElements())
+                if(my.equals(others))
+                    return true;
+
+        return false;
     }
 
     public String substring(String str, String from) {

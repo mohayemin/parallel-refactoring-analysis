@@ -7,7 +7,7 @@ import db.RefactoringDbItem;
 public class RenameParameterRefactoring extends Refactoring {
 
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
         var cls = substring(detail, "in class ");
         var method = substring(detail, "in method ", ") ") + ")";

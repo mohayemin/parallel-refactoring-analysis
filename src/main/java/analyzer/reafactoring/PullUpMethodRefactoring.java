@@ -9,7 +9,7 @@ public class PullUpMethodRefactoring extends Refactoring {
 
     // Pull Up Method	protected showAboutDialog() : void from class mediathek.mac.MediathekGuiMac to protected showAboutDialog() : void from class mediathek.MediathekGui----mediathek.mac.MediathekGuiMac.showAboutDialog()
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
         var targetString = substring(detail, "\t", " to ");
         var cls = substring(targetString, " from class ");

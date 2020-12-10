@@ -14,7 +14,7 @@ public class MoveAttributeRefactoring extends Refactoring {
     }
 
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         var parts = dbItem.refactoringDetail.replace('\t', ' ').split(" ");
         var attributeName = parts[3];
         var fromClass = parts[8];

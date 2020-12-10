@@ -15,7 +15,7 @@ public class MoveClassRefactoring extends Refactoring {
     }
 
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         var start = dbItem.refactoringDetail.indexOf('\t') + 1;
         var end = dbItem.refactoringDetail.indexOf(" moved");
         return dbItem.refactoringDetail.substring(start, end);

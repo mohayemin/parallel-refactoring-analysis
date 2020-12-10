@@ -9,7 +9,7 @@ public class ExtractInterfaceRefactoring extends Refactoring{
 
     // Extract Interface	com.aol.cyclops.sequence.streamable.ConvertableToSequenceM from classes [com.aol.cyclops.sequence.JoolWindowing, com.aol.cyclops.sequence.streamable.ToStream]----[com.aol.cyclops.sequence.JoolWindowing, com.aol.cyclops.sequence.streamable.ToStream]
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         return substring(dbItem.refactoringDetail, " from classes ");
     }
 }

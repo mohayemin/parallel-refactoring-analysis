@@ -9,7 +9,7 @@ public class ChangePackageRefactoring extends Refactoring{
 
     // Change Package	jackpal.androidterm.model to jackpal.androidterm.emulatorview----jackpal.androidterm.model
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         return substring(dbItem.refactoringDetail, "\t", " to ");
     }
 }

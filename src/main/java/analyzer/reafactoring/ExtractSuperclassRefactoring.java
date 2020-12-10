@@ -9,7 +9,7 @@ public class ExtractSuperclassRefactoring extends Refactoring{
 
     // Extract Superclass	cyclops.control.AbstractValueTest from classes [cyclops.control.MaybeTest, cyclops.control.OptionTest]----[cyclops.control.MaybeTest, cyclops.control.OptionTest]
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         return substring(dbItem.refactoringDetail, " from classes ");
     }
 }

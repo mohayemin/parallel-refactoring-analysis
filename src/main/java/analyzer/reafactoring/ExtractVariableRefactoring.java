@@ -9,7 +9,7 @@ public class ExtractVariableRefactoring extends Refactoring{
 
     // Extract Variable	actionBar : ActionBarCompat in method public onCreate(icicle Bundle) : void from class jackpal.androidterm.Term----jackpal.androidterm.Term.actionBar
     @Override
-    public String affectedElement() {
+    public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
         var cls = substring(detail, " from class ");
         var variable = substring(detail, "\t", " :");

@@ -18,7 +18,7 @@ public class CatchRefactoringParserError {
             totalCount++;
             var ref = factoru.create(r);
             try {
-                ref.affectedElement();
+                ref.allAffectedElements();
             } catch (IndexOutOfBoundsException e) {
                 errorCount++;
                 System.out.println(e.getMessage());
