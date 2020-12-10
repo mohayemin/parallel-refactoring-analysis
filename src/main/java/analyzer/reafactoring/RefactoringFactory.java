@@ -23,6 +23,7 @@ public class RefactoringFactory {
             case "Push Down Attribute" -> new PushDownAttributeRefactoring(dbItem);
             case "Extract Superclass" -> new ExtractSuperclassRefactoring(dbItem);
             case "Change Package" -> new ChangePackageRefactoring(dbItem);
+            case "Extract Interface" -> new ExtractInterfaceRefactoring(dbItem);
             default -> null;
         };
     }
