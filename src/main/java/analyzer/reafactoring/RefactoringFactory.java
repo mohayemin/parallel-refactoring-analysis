@@ -20,6 +20,7 @@ public class RefactoringFactory {
             case "Move And Rename Class" -> new MoveAndRenameClassRefactoring(dbItem);
             case "Push Down Method" -> new PushDownMethodRefactoring(dbItem);
             case "Inline Method" -> new InlineMethodRefactoring(dbItem);
+            case "Push Down Attribute" -> new PushDownAttributeRefactoring(dbItem);
             default -> null;
         };
     }
