@@ -12,6 +12,7 @@ public class RefactoringFactory {
             case "Move Attribute" -> new MoveAttributeRefactoring(dbItem);
             case "Extract Method" -> new ExtractMethodRefactoring(dbItem);
             case "Move Method" -> new MoveMethodRefactoring(dbItem);
+            case "Pull Up Method" -> new PullUpMethodRefactoring(dbItem);
             default -> null;
         };
     }
