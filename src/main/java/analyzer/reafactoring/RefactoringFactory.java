@@ -13,6 +13,7 @@ public class RefactoringFactory {
             case "Extract Method" -> new ExtractMethodRefactoring(dbItem);
             case "Move Method" -> new MoveMethodRefactoring(dbItem);
             case "Pull Up Method" -> new PullUpMethodRefactoring(dbItem);
+            case "Rename Class" -> new RenameClassRefactoring(dbItem);
             default -> null;
         };
     }
