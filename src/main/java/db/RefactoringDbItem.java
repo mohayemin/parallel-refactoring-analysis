@@ -22,4 +22,12 @@ public class RefactoringDbItem {
 
     @DatabaseField(columnName = "project_id")
     public int projectId;
+
+    public RefactoringDbItem(){
+    }
+
+    public RefactoringDbItem(String refactoringType, String refactoringDetail){
+        this.refactoringType = refactoringType;
+        this.refactoringDetail = refactoringDetail;
+    }
 }

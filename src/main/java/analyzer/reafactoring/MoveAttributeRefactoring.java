@@ -14,11 +14,11 @@ public class MoveAttributeRefactoring extends Refactoring {
     }
 
     @Override
-    public List<String> affectedElements() {
+    public String affectedElement() {
         var parts = dbItem.refactoringDetail.replace('\t', ' ').split(" ");
         var attributeName = parts[3];
         var fromClass = parts[8];
-        return Collections.singletonList(fromClass + "." + attributeName);
+        return fromClass + "." + attributeName;
     }
 }
 

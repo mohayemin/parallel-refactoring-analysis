@@ -7,22 +7,22 @@ import java.util.List;
 public abstract class Refactoring {
     public final RefactoringDbItem dbItem;
 
-    abstract List<String> affectedElements();
+    public abstract String affectedElement();
 
     protected Refactoring(RefactoringDbItem dbItem) {
         this.dbItem = dbItem;
     }
 
     public boolean overlaps(Refactoring other) {
-        var myAffected = affectedElements();
-        var otherAffected = other.affectedElements();
+        return affectedElement().equals(other.affectedElement());
+    }
 
-        for (var mf : myAffected)
-            for (var of : otherAffected)
-                if (mf.equals(of))
-                    return true;
+    public String substring(String str, String from) {
+        return str.substring(str.indexOf(from) + from.length());
+    }
 
-        return false;
+    public String substring(String str, String from, String to) {
+        return str.substring(str.indexOf(from) + from.length(), str.indexOf(to));
     }
 }
 
