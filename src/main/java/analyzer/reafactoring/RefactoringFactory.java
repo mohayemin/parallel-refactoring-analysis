@@ -18,6 +18,7 @@ public class RefactoringFactory {
             case "Extract And Move Method" -> new ExtractAndMoveMethodRefactoring(dbItem);
             case "Extract Variable" -> new ExtractVariableRefactoring(dbItem);
             case "Move And Rename Class" -> new MoveAndRenameClassRefactoring(dbItem);
+            case "Push Down Method" -> new PushDownMethodRefactoring(dbItem);
             default -> null;
         };
     }
