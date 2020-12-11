@@ -12,4 +12,8 @@ public class Pair<T> {
     public Pair(T[] items) {
         this(items[0], items[1]);
     }
+
+    public boolean equalsAny(T value) {
+        return value.equals(first) || value.equals(second);
+    }
 }

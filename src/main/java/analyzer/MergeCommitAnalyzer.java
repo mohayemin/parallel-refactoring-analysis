@@ -93,7 +93,7 @@ public class MergeCommitAnalyzer {
     private Set<String> getRefactoringCommitHashes(ObjectId from, ObjectId to) throws IOException, GitAPIException {
         var commits = git.log().addRange(from, to).call();
         var commitHashes = StreamSupport.stream(commits.spliterator(), false)
-                .filter(c->c.getParentCount() == 1) // keep non-merge commits only
+                .filter(c -> c.getParentCount() == 1) // keep non-merge commits only
                 .map(c -> c.getId().getName())
                 .collect(Collectors.toSet());
         commitHashes.retainAll(projectData.refactoringHashes);
@@ -105,13 +105,21 @@ public class MergeCommitAnalyzer {
     private RevCommit findMergeBase(Pair<RevCommit> children) throws IOException {
         RevWalk walk = new RevWalk(git.getRepository());
         walk.setRevFilter(RevFilter.MERGE_BASE);
-        walk.markStart(children.first);
-        walk.markStart(children.second);
+
+        /*
+         * For some unknown reason, this fails sometimes if the commits are not parsed again
+         */
+        var first = walk.parseCommit(children.first);
+        var second = walk.parseCommit(children.second);
+
+        walk.markStart(first);
+        walk.markStart(second);
+
         var base = walk.next();
         if (base == null)
             return null;
 
-        if (base.getName().equals(children.first.getName()) || base.getName().equals(children.second.getName()))
+        if (base.equals(first) || base.equals(second))
             return null;
 
         return base;

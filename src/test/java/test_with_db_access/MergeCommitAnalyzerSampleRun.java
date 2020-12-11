@@ -23,7 +23,7 @@ public class MergeCommitAnalyzerSampleRun {
 //        294
 //        430
 
-        var mc = pd.mergeCommits.stream().filter(m -> m.commitHash.equals("99a34497bfa4bc534dd8a088094fa6c6fef56f46")).findFirst().get();
+        var mc = pd.mergeCommits.stream().filter(m -> m.commitHash.equals("5a219f9802640b6897d917d6b9980690ecce4076")).findFirst().get();
         var mca = new MergeCommitAnalyzer(db, git, pd, mc, new RefactoringFactory());
         mca.analyzeParallelRefactoring();
     }
