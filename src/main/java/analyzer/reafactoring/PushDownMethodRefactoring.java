@@ -13,14 +13,12 @@ public class PushDownMethodRefactoring extends Refactoring{
     @Override
     public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
-        var parts = detail.split(" from class ");
-        var method = substring(parts[0], "\t", ")") + ")";
-        method = method
-                .replaceFirst("public ", "")
-                .replaceFirst("private ", "")
-                .replaceFirst("protected ", "");
 
-        var cls = substring(parts[1], "", " to ");
+        var method = substring(detail, "\t", " from class ");
+        method = removeAccessModifier(method);
+        method = substring(method, "", ")") + ")";
+        var cls = substring(detail, " from class ");
+        cls = substring(cls, "", " to ");
         return cls + "." + method;
     }
 }

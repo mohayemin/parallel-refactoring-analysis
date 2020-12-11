@@ -2,23 +2,19 @@ package analyzer.reafactoring;
 
 import db.RefactoringDbItem;
 
-import java.util.Collections;
-import java.util.List;
-
-// Move Attribute	protected modelManager : StructureModelManager
-// from class melnorme.lang.ide.ui.editor.structure.LangOutlineInformationControl
-//   to class melnorme.lang.ide.ui.editor.structure.GetUpdatedStructureUIOperation
 public class MoveAttributeRefactoring extends Refactoring {
     public MoveAttributeRefactoring(RefactoringDbItem dbItem) {
         super(dbItem);
     }
 
+    // Move Attribute	public DEBUG : boolean from class jackpal.androidterm2.Term to class jackpal.androidterm2.TermDebug----jackpal.androidterm2.Term.DEBUG----
     @Override
     public String affectedElementRaw() {
-        var parts = dbItem.refactoringDetail.replace('\t', ' ').split(" ");
-        var attributeName = parts[3];
-        var fromClass = parts[8];
-        return fromClass + "." + attributeName;
+        var detail = dbItem.refactoringDetail;
+        var attribute = substring(detail, "\t", " : ");
+        attribute = removeAccessModifier(attribute);
+        var cls = substring(detail, " from class ", " to class ");
+        return cls + "." + attribute;
     }
 }
 

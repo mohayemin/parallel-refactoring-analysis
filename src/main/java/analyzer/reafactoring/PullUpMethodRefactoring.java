@@ -11,9 +11,11 @@ public class PullUpMethodRefactoring extends Refactoring {
     @Override
     public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
-        var targetString = substring(detail, "\t", " to ");
-        var cls = substring(targetString, " from class ");
-        var method = substring(targetString, " ", ") ") + ")";
+        var method = substring(detail, "\t", " from class ");
+        method = removeAccessModifier(method);
+        method = substring(method, "", ")") + ")";
+        var cls = substring(detail, " from class ");
+        cls = substring(cls, "", " to ");
         return cls + "." + method;
     }
 }

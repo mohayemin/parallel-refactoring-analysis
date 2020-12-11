@@ -11,10 +11,12 @@ public class RenameVariableRefactoring extends Refactoring{
     @Override
     public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
-        var cls = substring(detail, "in class ");
-        var method = substring(detail, "in method ", ") ") + ")";
-        method = substring(method, " ");
-        var previousName =  substring(detail, "\t", " :");
+        var cls = substring(detail, " in class ");
+        var method = substring(detail, " in method ", " in class");
+        method = removeAccessModifier(method);
+        method = substring(method, "", ")") + ")";
+        var previousName =  substring(detail, "\t", " : ");
+
         return cls + "." + method + "." + previousName;
     }
 }

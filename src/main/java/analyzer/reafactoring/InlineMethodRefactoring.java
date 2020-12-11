@@ -12,8 +12,8 @@ public class InlineMethodRefactoring extends Refactoring{
     public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
         var cls = substring(detail, " in class ");
-        var method = substring(detail, "\t", ") ");
-        method = substring(method, " ") + ")";
+        var method = substring(detail, "\t", ") ") + ")";
+        method = removeAccessModifier(method);
         return cls + "." + method;
     }
 }

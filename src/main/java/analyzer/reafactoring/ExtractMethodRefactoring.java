@@ -14,9 +14,10 @@ public class ExtractMethodRefactoring extends Refactoring {
     @Override
     public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
-        var cls = substring(detail, "in class ");
-        var from = substring(detail, "extracted from ");
-        from = substring(from, " ", ") ") + ")";
+        var cls = substring(detail, " in class ");
+        var from = substring(detail, " extracted from ", " in class ");
+        from = removeAccessModifier(from);
+        from = substring(from, "", ")") + ")";
         return cls + "." + from;
     }
 }

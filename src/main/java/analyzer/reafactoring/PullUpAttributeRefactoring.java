@@ -13,7 +13,7 @@ public class PullUpAttributeRefactoring extends Refactoring {
         var detail = dbItem.refactoringDetail;
         var cls = substring(detail, " from class ", " to class ");
         var attribute = substring(detail, "\t", " :");
-        attribute = substring(attribute, " ");
+        attribute = removeAccessModifier(attribute);
         return cls + "." + attribute;
     }
 }

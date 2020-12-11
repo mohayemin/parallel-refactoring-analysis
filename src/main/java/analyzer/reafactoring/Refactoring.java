@@ -45,6 +45,12 @@ public abstract class Refactoring {
         return str.substring(str.indexOf(from) + from.length(), str.indexOf(to));
     }
 
+    public String removeAccessModifier(String str){
+        return str.replaceAll("public ", "")
+                .replaceAll("private ", "")
+                .replaceAll("protected ", "");
+    }
+
     /**
      * This method uses a simple heuristic for rebase
      * If refactoring details are identical, possibly it is rebase

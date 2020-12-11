@@ -9,9 +9,10 @@ public class RenameParameterRefactoring extends Refactoring {
     @Override
     public String affectedElementRaw() {
         var detail = dbItem.refactoringDetail;
-        var cls = substring(detail, "in class ");
-        var method = substring(detail, "in method ", ") ") + ")";
-        method = substring(method, " ");
+        var cls = substring(detail, " in class ");
+        var method = substring(detail, " in method ", " in class");
+        method = removeAccessModifier(method);
+        method = substring(method, "", ")") + ")";
         return cls + "." + method;
     }
 

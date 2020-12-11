@@ -75,7 +75,10 @@ public class RefactoringTest {
         var refactoring = new RefactoringFactory().create(dbItem);
         var expectedList = secondItem == null ? Collections.singletonList(firstItem) : Arrays.asList(firstItem, secondItem);
         var actualList = refactoring.allAffectedElements();
-        Assertions.assertTrue(expectedList.containsAll(actualList));
-        Assertions.assertTrue(actualList.containsAll(expectedList));
+
+        Assertions.assertEquals(expectedList.get(0), actualList.get(0));
+
+        if (expectedList.size() > 1)
+            Assertions.assertEquals(expectedList.get(1), actualList.get(1));
     }
 }
