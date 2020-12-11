@@ -13,7 +13,7 @@ public class ExtractAndMoveMethodRefactoring extends Refactoring {
         var detail = dbItem.refactoringDetail;
         var cls = substring(detail, " in class ", " & ");
         var from = substring(detail, " extracted from ", " in class ");
-        from = substring(from, " ", ") ") + ")";
+        from = substring(from, " ", ")") + ")";
         return cls + "." + from;
     }
 }
