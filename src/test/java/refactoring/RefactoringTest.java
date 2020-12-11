@@ -64,7 +64,7 @@ public class RefactoringTest {
                     "Change Package\tjackpal.androidterm.model to jackpal.androidterm.emulatorview----jackpal.androidterm.model----",
                     "Extract Interface\tcom.aol.cyclops.sequence.streamable.ConvertableToSequenceM from classes [com.aol.cyclops.sequence.JoolWindowing, com.aol.cyclops.sequence.streamable.ToStream]----com.aol.cyclops.sequence.JoolWindowing----com.aol.cyclops.sequence.streamable.ToStream",
                     "Extract And Move Method\tpublic verifySupport(name String) : void extracted from private AMDCompressedATCTexture() in class c.org.rajawali3d.gl.extensions.texture.AMDCompressedATCTexture & moved to class c.org.rajawali3d.gl.extensions.GLExtension----c.org.rajawali3d.gl.extensions.texture.AMDCompressedATCTexture.AMDCompressedATCTexture()----",
-                    "Move Method\tpublic mapValidationMessageFieldNames(validation_messages ValidationMessageBase[], from String[], to String[]) : void from class water.api.ValidationMessageBase to public mapValidationMessageFieldNames(validation_messages ValidationMessageV3[], from String[], to String[]) : void from class water.api.schemas3.ValidationMessageV3----water.api.ValidationMessageBase.mapValidationMessageFieldNames(validation_messages ValidationMessageBase[], from String[], to String[])----"
+                    "Move Method\tpublic formGram(x double[][], transpose boolean) : double[][] from class hex.pca.PCA to public formGram(x double[][], transpose boolean) : double[][] from class water.util.ArrayUtils----hex.pca.PCA.formGram(x double[][], transpose boolean)----"
             }
     )
     public void testParsing(String refactoringDescription, String firstItem, String secondItem) {
