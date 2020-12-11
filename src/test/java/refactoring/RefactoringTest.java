@@ -64,7 +64,9 @@ public class RefactoringTest {
                     "Change Package\tjackpal.androidterm.model to jackpal.androidterm.emulatorview----jackpal.androidterm.model----",
                     "Extract Interface\tcom.aol.cyclops.sequence.streamable.ConvertableToSequenceM from classes [com.aol.cyclops.sequence.JoolWindowing, com.aol.cyclops.sequence.streamable.ToStream]----com.aol.cyclops.sequence.JoolWindowing----com.aol.cyclops.sequence.streamable.ToStream",
                     "Extract And Move Method\tpublic verifySupport(name String) : void extracted from private AMDCompressedATCTexture() in class c.org.rajawali3d.gl.extensions.texture.AMDCompressedATCTexture & moved to class c.org.rajawali3d.gl.extensions.GLExtension----c.org.rajawali3d.gl.extensions.texture.AMDCompressedATCTexture.AMDCompressedATCTexture()----",
-                    "Move Method\tpublic formGram(x double[][], transpose boolean) : double[][] from class hex.pca.PCA to public formGram(x double[][], transpose boolean) : double[][] from class water.util.ArrayUtils----hex.pca.PCA.formGram(x double[][], transpose boolean)----"
+                    "Move Method\tpublic formGram(x double[][], transpose boolean) : double[][] from class hex.pca.PCA to public formGram(x double[][], transpose boolean) : double[][] from class water.util.ArrayUtils----hex.pca.PCA.formGram(x double[][], transpose boolean)----",
+                    "Push Down Method\tpublic distance(from Coordinate, to Coordinate) : double from class org.opentripplanner.common.geometry.DistanceLibrary to public distance(from Coordinate, to Coordinate) : double from class org.opentripplanner.common.geometry.SphericalDistanceLibrary----org.opentripplanner.common.geometry.DistanceLibrary.distance(from Coordinate, to Coordinate)----",
+                    "Push Down Method\tpublic Finder(target Type) from class com.sun.tools.javac.ceylon.ExtensionFinder.Finder to public TypeFinder(target Type) from class com.sun.tools.javac.ceylon.ExtensionFinder.TypeFinder----com.sun.tools.javac.ceylon.ExtensionFinder.Finder.Finder(target Type)----"
             }
     )
     public void testParsing(String refactoringDescription, String firstItem, String secondItem) {
@@ -72,7 +74,8 @@ public class RefactoringTest {
         var dbItem = new RefactoringDbItem(type, refactoringDescription);
         var refactoring = new RefactoringFactory().create(dbItem);
         var expectedList = secondItem == null ? Collections.singletonList(firstItem) : Arrays.asList(firstItem, secondItem);
-        Assertions.assertTrue(expectedList.containsAll(refactoring.allAffectedElements()));
-        Assertions.assertTrue(refactoring.allAffectedElements().containsAll(expectedList));
+        var actualList = refactoring.allAffectedElements();
+        Assertions.assertTrue(expectedList.containsAll(actualList));
+        Assertions.assertTrue(actualList.containsAll(expectedList));
     }
 }

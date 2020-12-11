@@ -50,8 +50,8 @@ public abstract class Refactoring {
      * If refactoring details are identical, possibly it is rebase
      * This is actually OK for the analysis because identical refactoring in
      * parallel branches will no effect on conflict
-     * @param other
-     * @return
+     * @param other refactoring to compare with
+     * @return whether they are same or rebase
      */
     private boolean isSameOrRebase(Refactoring other) {
         /*
@@ -63,5 +63,6 @@ public abstract class Refactoring {
                 dbItem.refactoringDetail.equals(other.dbItem.refactoringDetail)
         ;
     }
+
 }
 
