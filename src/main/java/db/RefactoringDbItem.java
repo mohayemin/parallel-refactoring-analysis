@@ -3,6 +3,8 @@ package db;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
+import java.util.UUID;
+
 @DatabaseTable(tableName = "refactoring")
 public class RefactoringDbItem {
     @DatabaseField(generatedId = true)
@@ -26,8 +28,12 @@ public class RefactoringDbItem {
     public RefactoringDbItem(){
     }
 
+    /**
+     * This constructor is for unit testing only
+     */
     public RefactoringDbItem(String refactoringType, String refactoringDetail){
         this.refactoringType = refactoringType;
         this.refactoringDetail = refactoringDetail;
+        commitHash = UUID.randomUUID().toString();
     }
 }

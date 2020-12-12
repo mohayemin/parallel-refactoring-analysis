@@ -13,7 +13,8 @@ public class RenameParameterRefactoring extends Refactoring {
         var method = substring(detail, " in method ", " in class");
         method = removeAccessModifier(method);
         method = substring(method, "", ")") + ")";
-        return cls + "." + method;
+        var param = substring(detail, "\t", " : ");
+        return cls + "." + method + "." + param;
     }
 
     protected RenameParameterRefactoring(RefactoringDbItem dbItem) {
