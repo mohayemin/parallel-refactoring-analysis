@@ -34,7 +34,7 @@ to automatically merge them under some conditions.
 
 #### Steps
 1. Install MySQL database version 8 or above 
-1. Download the zip containing the database backup from here: https://github.com/mohayemin/parallel-refactoring-analysis/datadump/parallel_refactoring_analysis.zip
+1. Download the zip containing the database backup from here: https://github.com/mohayemin/parallel-refactoring-analysis/blob/master/datadump/parallel_refactoring_analysis.zip
 1. Unzip the file, you will find a file `parallel-refactoring-analysis.sql`
 1. Restore the database
    1. Open a command line terminal
